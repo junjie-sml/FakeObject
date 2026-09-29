@@ -1,0 +1,5 @@
+limit: 10
+generate_images: false
+pipeline: brushedit
+seed: 42
+quality: preview

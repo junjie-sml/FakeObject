@@ -1,0 +1,12 @@
+LOW_VRAM:
+  max_side: 512
+  offload: sequential
+  steps: 20
+STANDARD:
+  max_side: 768
+  offload: model
+  steps: 30
+HIGH_VRAM:
+  max_side: 1024
+  offload: model
+  steps: 40

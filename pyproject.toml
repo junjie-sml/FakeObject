@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fake-object-editor"
+version = "0.2.0"
+description = "Local fictional object replacement research workbench"
+requires-python = ">=3.11,<3.12"
+license = "MIT"
+dependencies = ["gradio==5.50.0", "pydantic>=2.10,<3", "Pillow>=10", "numpy", "scipy", "PyYAML", "filelock", "psutil", "huggingface_hub", "requests", "scikit-image"]
+
+[project.scripts]
+fake-object-editor = "src.ui.app:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--basetemp=data/cache/pytest"

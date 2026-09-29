@@ -1,0 +1,8 @@
+transformers==5.17.0
+git+https://github.com/huggingface/diffusers@e0abab83b5df05de9e7abd788643c1a7c1e42e28
+accelerate
+safetensors
+sentencepiece
+psutil
+PyYAML
+scipy

@@ -1,0 +1,35 @@
+preset: balanced
+novelty: 0.75
+realism: 0.9
+preservation: 0.95
+geometry_complexity: 0.55
+functional_ambiguity: 0.75
+material_complexity: 0.35
+max_major_geometry_features: 2
+max_materials: 3
+anti_scifi_default: true
+anti_category_collapse: true
+prompt_length: standard
+concept_candidates: 3
+backend: DETERMINISTIC_TEMPLATE_FALLBACK
+presets:
+  conservative:
+    novelty: 0.55
+    realism: 0.95
+    preservation: 0.98
+    geometry_complexity: 0.35
+  balanced:
+    novelty: 0.75
+    realism: 0.9
+    preservation: 0.95
+    geometry_complexity: 0.55
+  highly_novel:
+    novelty: 0.9
+    realism: 0.8
+    preservation: 0.93
+    geometry_complexity: 0.75
+  experimental:
+    novelty: 0.95
+    realism: 0.65
+    preservation: 0.85
+    geometry_complexity: 0.9

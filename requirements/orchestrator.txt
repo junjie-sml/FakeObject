@@ -1,0 +1,12 @@
+gradio==5.50.0
+pydantic>=2.10,<3
+numpy
+scipy
+Pillow>=10
+PyYAML
+psutil
+filelock
+huggingface_hub
+scikit-image
+requests
+pytest

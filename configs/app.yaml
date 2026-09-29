@@ -1,0 +1,5 @@
+host: 127.0.0.1
+port: 7860
+share: false
+max_image_pixels: 25000000
+worker_timeout: 1800

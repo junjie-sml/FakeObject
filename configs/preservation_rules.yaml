@@ -1,0 +1,24 @@
+physical:
+- Respect gravity and a credible center of mass
+- Maintain support and contact shadows
+- Retain approximate scale and orientation
+- Match perspective, light softness, color temperature and shadow direction
+- Match depth of field and image grain
+- Respect occlusions and material reflections
+- Avoid self-intersections and geometry penetration
+preserve:
+- people and faces
+- hands and clothing
+- nearby objects
+- background and architecture
+- surface textures
+- text and signage
+- camera and composition
+- image dimensions and global color balance
+prohibit:
+- crop
+- zoom
+- recompose
+- restyle
+- unrelated additions or removals
+- global illumination changes

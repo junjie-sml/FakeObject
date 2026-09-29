@@ -1,0 +1,8 @@
+repo: TencentARC/BrushEdit
+base_subfolder: base_model/realisticVisionV60B1_v51VAE
+brushnet_subfolder: brushnetX
+precision: float16
+offload: model
+guidance_scale: 7.5
+control_strength: 1.0
+native_vlm: false

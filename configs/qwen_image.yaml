@@ -1,0 +1,8 @@
+model_id: Qwen/Qwen-Image-2.1
+pipeline_class: QwenImage21Pipeline
+precision: bfloat16
+offload: sequential
+preview_resolution_tested: true
+true_cfg_scale: 1.0
+mask_strategy: source_scope
+steps: 40

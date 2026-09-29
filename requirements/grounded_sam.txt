@@ -1,0 +1,10 @@
+transformers==4.48.3
+numpy==1.26.4
+hydra-core
+iopath
+psutil
+PyYAML
+scipy
+Pillow
+accelerate
+wheel

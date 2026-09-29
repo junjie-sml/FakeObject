@@ -1,0 +1,105 @@
+templates:
+- id: T01
+  name: Nested shell
+  primary: two offset nested shells
+  secondary: an asymmetric opening exposing the inner layer
+- id: T02
+  name: Suspended membrane
+  primary: a shallow rounded manufactured frame
+  secondary: a thin translucent membrane attached inside a recess
+- id: T03
+  name: Radial hollow fins
+  primary: an asymmetric solid central body
+  secondary: three short hollow fins of unequal lengths
+- id: T04
+  name: Offset aperture
+  primary: a flattened softly curved volume
+  secondary: an off-center partial aperture with a material transition
+- id: T05
+  name: Layered collar
+  primary: three partially overlapping curved layers
+  secondary: an offset inner core anchored to the base
+- id: T06
+  name: Split shell
+  primary: a compact continuous outer shell
+  secondary: an irregular recessed seam exposing a contrasting layer
+- id: T07
+  name: Partial lattice
+  primary: a solid rounded volume
+  secondary: one recessed fine lattice region
+- id: T08
+  name: Folded ridge
+  primary: an asymmetric shallow volume
+  secondary: one continuous ridge of smoothly varying height
+- id: T09
+  name: Hollow channel
+  primary: a softly faceted connected volume
+  secondary: a narrow channel connecting two recessed openings
+- id: T10
+  name: Bifurcated base
+  primary: a stable tapered shell
+  secondary: two integrated curved contact zones
+- id: T11
+  name: Inset disc
+  primary: a flattened rounded prism
+  secondary: a tilted circular inset below the outer surface
+- id: T12
+  name: Soft faceted body
+  primary: broad smooth facets with nonuniform curvature
+  secondary: a small offset hollow region
+- id: T13
+  name: Translucent core
+  primary: an opaque protective shell
+  secondary: a partially exposed translucent internal core
+- id: T14
+  name: Discontinuous rim
+  primary: a low rounded closed body
+  secondary: several separated shallow rim sections
+- id: T15
+  name: Interlocking volumes
+  primary: two coherent interlocking volumes
+  secondary: a recessed mechanical material interface
+- id: T16
+  name: Recessed interface
+  primary: a softly tapered asymmetrical volume
+  secondary: a shallow tactile recess without screen or buttons
+- id: T17
+  name: Organic industrial curvature
+  primary: a synthetic body with smooth biological curvature
+  secondary: a precisely molded folded ridge
+- id: T18
+  name: Offset inner chamber
+  primary: a thick-walled external shell
+  secondary: a narrow opening into an off-center chamber
+- id: T19
+  name: Segmented surface
+  primary: one coherent rounded shell
+  secondary: broad irregular regions of subtly differing depth
+- id: T20
+  name: Asymmetric toroid
+  primary: a partial toroidal body with variable thickness
+  secondary: an offset opening and stable integrated contact face
+details:
+- a shallow recessed channel
+- a molded transition with consistent wall thickness
+- a narrow embedded plate
+- a small frosted inset
+material_pairs:
+- - matte ceramic
+  - frosted polymer
+- - fine-grained mineral composite
+  - satin polymer
+- - brushed alloy
+  - soft-touch elastomer
+- - low-gloss enamel
+  - translucent resin
+colors:
+- off-white
+- warm gray
+- blue-gray
+- desaturated green
+- pale clay
+- charcoal
+- muted amber
+- ivory
+- mineral beige

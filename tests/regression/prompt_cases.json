@@ -1,0 +1,17 @@
+[
+  "mug on table",
+  "bottle on counter",
+  "desk lamp",
+  "chair",
+  "backpack",
+  "keyboard",
+  "phone",
+  "vase",
+  "handheld object",
+  "partially occluded object",
+  "reflective object",
+  "transparent object",
+  "cluttered small object",
+  "multiple same-category objects",
+  "low-light object"
+]

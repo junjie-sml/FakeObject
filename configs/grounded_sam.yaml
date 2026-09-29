@@ -1,0 +1,11 @@
+grounder: IDEA-Research/grounding-dino-tiny
+sam: facebook/sam2.1-hiera-tiny
+sam_config: configs/sam2.1/sam2.1_hiera_t.yaml
+threshold: 0.3
+text_threshold: 0.25
+max_candidates: 20
+broad_threshold: 0.15
+broad_max_candidates: 50
+duplicate_iou: 0.9
+sam_batch_size: 4
+sam_cuda_extension: false

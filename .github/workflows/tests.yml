@@ -1,0 +1,29 @@
+name: CPU tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Create UI environment without models
+        run: python scripts/bootstrap.py --ui-only
+      - name: Run CPU regression tests and construct UI
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then PY=envs/orchestrator/Scripts/python.exe; else PY=envs/orchestrator/bin/python; fi
+          "$PY" -m pytest -q
+          "$PY" -c "from src.ui.app import make_app; app=make_app(); assert app.blocks"
+      - name: Audit source-only repository
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Windows" ]; then PY=envs/orchestrator/Scripts/python.exe; else PY=envs/orchestrator/bin/python; fi
+          "$PY" scripts/check_release.py

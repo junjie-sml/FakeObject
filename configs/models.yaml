@@ -1,0 +1,57 @@
+grounding_dino:
+  source: IDEA-Research/grounding-dino-tiny
+  path: models/grounding_dino
+  pipeline: grounded_sam
+  precision: float32
+  required: true
+  license_note: Apache-2.0; see model card
+  patterns:
+  - '*.json'
+  - '*.safetensors'
+  - '*.txt'
+  revision: a2bb814dd30d776dcf7e30523b00659f4f141c71
+sam2:
+  source: facebook/sam2.1-hiera-tiny
+  path: models/sam2
+  pipeline: grounded_sam
+  precision: float32
+  required: true
+  license_note: Apache-2.0; see model card
+  patterns:
+  - sam2.1_hiera_tiny.pt
+  - '*.json'
+  - README.md
+  revision: de431c4043854a71d8101e17995dfe596bf101a5
+brushedit:
+  source: TencentARC/BrushEdit
+  path: models/brushedit
+  pipeline: brushedit
+  precision: float16
+  required: true
+  license_note: BrushEdit custom license and separate base-model terms
+  patterns:
+  - brushnetX/*
+  - base_model/realisticVisionV60B1_v51VAE/*
+  - README.md
+  revision: 7e00da078a956ba2a9c2c91807c1f126b51489e6
+qwen:
+  source: Qwen/Qwen-Image-2.1
+  path: models/qwen_image
+  pipeline: qwen_image
+  precision: bfloat16
+  required: true
+  license_note: Qwen RESEARCH LICENSE AGREEMENT; see upstream LICENSE
+  patterns: null
+  revision: 790c92633540aa0cb11d9abf19eb46d861714758
+clip:
+  source: openai/clip-vit-base-patch32
+  path: models/clip
+  pipeline: evaluation
+  precision: float32
+  required: false
+  license_note: MIT; diagnostic similarity, not novelty proof
+  patterns:
+  - '*.json'
+  - '*.txt'
+  - pytorch_model.bin
+  revision: 3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268

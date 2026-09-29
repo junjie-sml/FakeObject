@@ -1,0 +1,31 @@
+default_exclusions:
+- vase
+- lamp
+- speaker
+- toy
+- appliance
+groups:
+  mug:
+  - cup
+  - vase
+  - lamp
+  - speaker
+  - toy
+  - kitchen appliance
+  bottle:
+  - vase
+  - thermos
+  - lamp
+  - speaker
+  - container
+  chair:
+  - stool
+  - armchair
+  - bench
+  - toy
+  - appliance
+thresholds:
+  novelty: 0.65
+  plausibility: 0.7
+  preservation: 0.85
+  specificity: 0.7

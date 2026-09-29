@@ -1,0 +1,22 @@
+# Rebuild virtual environments and dependencies on each machine.
+/envs/
+/third_party/
+/models/
+/data/
+/logs/
+/dist/
+/build/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+.env
+.env.*
+!.env.example
+*.py[cod]
+.venv/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+# Local benchmark history; public setup and limitations are in docs/.
+/PROJECT_STATUS.md

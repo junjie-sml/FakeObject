@@ -1,0 +1,14 @@
+[
+  {
+    "target": "mug",
+    "prompt": "Replace the mug with a semantically unfamiliar manufactured object."
+  },
+  {
+    "target": "bottle",
+    "prompt": "Replace the bottle with a semantically unfamiliar manufactured object."
+  },
+  {
+    "target": "lamp",
+    "prompt": "Replace the lamp with a semantically unfamiliar manufactured object."
+  }
+]
