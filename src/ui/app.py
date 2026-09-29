@@ -42,14 +42,25 @@ def system_status():
     import shutil
     models=registry(); disk=shutil.disk_usage(ROOT)
     health_path=ROOT/'data/metadata/health.json'
+    workers={'orchestrator','grounded_sam','qwen_image'}
+    health=json.loads(health_path.read_text()) if health_path.exists() else {}
+    if 'workers' in health: health['workers']={k:v for k,v in health['workers'].items() if k in workers}
+    environments=json.loads(versions.read_text()) if versions.exists() else {}
+    environments={k:v for k,v in environments.items() if k in workers}
+    verified=json.loads(evidence.read_text()) if evidence.exists() else {'status':'not yet tested'}
+    verified={k:v for k,v in verified.items() if not k.endswith(('_health','_actual_edit')) or any(k.startswith(w+'_') for w in workers)}
+    repositories=ROOT/'data/metadata/repository_versions.json'
+    commits=json.loads(repositories.read_text()) if repositories.exists() else []
+    supported=json.loads((ROOT/'configs/repositories.json').read_text())
+    commits=[r for r in commits if r.get('name') in supported]
     return {'hardware':detect_hardware(),'models':models,'cache':str(ROOT/'data/cache'),
-            'worker_health':json.loads(health_path.read_text()) if health_path.exists() else {},
-            'environments':json.loads(versions.read_text()) if versions.exists() else {},
-            'verified_tests':json.loads(evidence.read_text()) if evidence.exists() else {'status':'not yet tested'},
+            'worker_health':health,
+            'environments':environments,
+            'verified_tests':verified,
             'disk_free_gb':round(shutil.disk_usage(ROOT).free/2**30,2),
             'disk_used_gb':round(disk.used/2**30,2),'model_download_gb':round(sum(m.get('required_disk_bytes') or 0 for m in models)/2**30,2),
             'privacy':'仅在本机运行。推理进程离线，不向外部 API 上传图片。',
-            'repository_commits':json.loads((ROOT/'data/metadata/repository_versions.json').read_text()) if (ROOT/'data/metadata/repository_versions.json').exists() else []}
+            'repository_commits':commits}
 
 def make_app():
     records=manifest(); demos=[(Path(r['local_path']).name+' | '+'、'.join(zh(x) for x in r['candidate_objects'][:4]),r['local_path']) for r in records[:10]]
@@ -58,7 +69,7 @@ def make_app():
         gr.Markdown('**操作流程** · ① 上传图片 → ② 检测并选择目标 → ③ 设计概念 → ④ 生成结果。支持中文或英文提示词；概念生成不加载图像模型。')
         verified=system_status()['verified_tests']
         badges=[]
-        for name,label in [('brushedit','BrushEdit'),('qwen_image','Qwen 2.1')]:
+        for name,label in [('qwen_image','Grounded-SAM-2 + Qwen 2.1')]:
             status_text='可用（已验证真实推理）' if verified.get(name+'_actual_edit',{}).get('status')=='PASS' else '部分可用（尚未验证推理）'
             entry=next(x for x in registry() if x['pipeline']==name)
             if entry['download_status']!='DOWNLOADED': status_text='不可用（缺少权重）'
@@ -73,7 +84,7 @@ def make_app():
                         demo=gr.Dropdown(demos,label='演示照片',value=None)
                         instruction=gr.Textbox(value='Replace the cup with an unfamiliar manufactured object that does not correspond to a known everyday product.',label='编辑要求（中文 / English）',lines=3)
                         target=gr.Textbox(value='cup',label='目标物体（可选，支持中英文）',placeholder='例如：杯子 / cup、马克杯 / mug、瓶子 / bottle')
-                        pipeline=gr.Radio([('A · BrushEdit / BrushNetX','brushedit'),('B · Grounded-SAM-2 + Qwen 2.1','qwen_image')],value='brushedit',label='编辑方案')
+                        pipeline=gr.State('qwen_image')
                         preset=gr.Dropdown([('保守','conservative'),('均衡','balanced'),('高度新颖','highly_novel'),('实验性','experimental')],value='balanced',label='设计预设')
                         mode=gr.Dropdown([('自主创作','autonomous'),('沿用用户构想','user_concept'),('仅润色细节','minimal_polish'),('概念探索','exploration')],value='user_concept',label='提示词模式',info='默认按你的编辑要求生成；自主创作会额外提供虚构物体设计建议。')
                         with gr.Row():
@@ -127,12 +138,6 @@ def make_app():
                             metrics=gr.JSON(label='诊断结果（不能证明物体不存在）')
                         metadata_file=gr.File(label='本次运行元数据')
 
-            with gr.Tab('方案对比',id='compare'):
-                gr.Markdown('使用“单图编辑”中的当前图片、所选实例、概念 JSON 和随机种子。先运行方案 A，再运行方案 B；前一个模型释放显存后才加载下一个。')
-                compare_button=gr.Button('依次运行两个方案',variant='primary')
-                with gr.Row(): compare_a=gr.Image(label='BrushEdit'); compare_b=gr.Image(label='Qwen 2.1')
-                compare_info=gr.JSON(label='对比诊断')
-
             with gr.Tab('虚构物体设计器',id='designer'):
                 gr.Markdown('只生成文本概念，不加载 GPU 模型。评分来自文本启发式规则。支持中英文设计要求；可编辑 JSON 精细调整。')
                 dtarget=gr.Textbox(value='mug',label='目标物体（中文 / English）')
@@ -175,7 +180,6 @@ def make_app():
 
             with gr.Tab('结果与历史',id='history'):
                 with gr.Row():
-                    hpipeline=gr.Dropdown([('全部','all'),('BrushEdit','brushedit'),('Qwen 2.1','qwen_image')],value='all',label='编辑方案')
                     htarget=gr.Textbox(label='目标名称包含'); hdate=gr.Textbox(label='日期（YYYY-MM-DD）'); hfailure=gr.Textbox(label='警告内容包含')
                 refresh=gr.Button('刷新历史记录'); history=gr.Dropdown([],label='已保存运行记录'); gallery=gr.Gallery(label='生成结果',columns=4,height=300); hjson=gr.JSON()
                 gr.Markdown('人工评分（1–5 分）；未提交的评分不会自动计入。')
@@ -250,16 +254,6 @@ def make_app():
             scope=f"本次结果对应 **候选 {region['display_number']} · {zh(region['label'])}**。\n\n" if region else ''
             return result.raw_model_output,result.strict_output,result.evaluation,scope+f'**{zh(result.status)}** · 耗时 {result.runtime["total"]:.1f} 秒\n\n'+'\n\n'.join(message(w) for w in result.warnings),str(Path(result.output_dir)/'metadata.json'),result.model_dump()
 
-        @guarded
-        def compare_cb(im,prompt,t,idx,s,q,det,sjson,d,f,c,occ,holes,pmode,progress=gr.Progress()):
-            spec=FakeObjectSpec.model_validate_json(sjson) if sjson else generate_concepts(prompt,infer_target(prompt,t),seed=int(s),mode=pmode)[0]
-            outputs=[]; reports=[]
-            for i,pipe in enumerate(['brushedit','qwen_image']):
-                progress(i/2,desc=f'正在运行 {pipe}')
-                r=run_edit(im,pipe,prompt,t,idx,int(s),True,q,det,spec,None,{'mask_dilation_px':d,'mask_feather_px':f,'cleanup_min_component':int(c),'fill_holes':holes},occ)
-                outputs.append(r.strict_output); reports.append(r.model_dump())
-            return *outputs,reports
-
         def preset_change(p):
             c=Controls(**config('fake_object_skill')['presets'][p]); return c.novelty,c.realism,c.preservation,c.geometry_complexity,c.functional_ambiguity,c.material_complexity
 
@@ -278,10 +272,8 @@ def make_app():
         concepts_button.click(ui_concepts,[image,instruction,target,seed,preset,mode,novelty,realism,preservation,complexity,ambiguity,material,detection,instance],[concepts,concept_cards,scene_json,concept_choice]).then(choose,[concepts,concept_choice,pipeline],[spec_json,polished,backend_prompt])
         concept_choice.change(choose,[concepts,concept_choice,pipeline],[spec_json,polished,backend_prompt])
         compile_button.click(compile_json,[spec_json,pipeline],[polished,backend_prompt])
-        pipeline.change(guarded(lambda text,p: compile_json(text,p) if text else ('','')),[spec_json,pipeline],[polished,backend_prompt])
         mode.change(lambda:([],'提示词模式已更新，可重新生成概念，也可直接开始生成。','','',''),outputs=[concepts,concept_cards,spec_json,polished,backend_prompt])
         run_button.click(edit_cb,[image,pipeline,instruction,target,instance,seed,strict,quality,detection,spec_json,backend_prompt,dilation,feather,cleanup,occluder,fillholes,mode],[raw_output,strict_output,metrics,diagnostic,metadata_file,run_state])
-        compare_button.click(compare_cb,[image,instruction,target,instance,seed,quality,detection,spec_json,dilation,feather,cleanup,occluder,fillholes,mode],[compare_a,compare_b,compare_info])
         image.change(lambda:(None,[],None,None,'','','',None,None,{},None,[],gr.update(choices=[],value=None)),outputs=[detection,concepts,boxes_view,mask_view,spec_json,polished,backend_prompt,raw_output,strict_output,metrics,metadata_file,candidates_view,instance])
 
         @guarded
@@ -316,16 +308,16 @@ def make_app():
         dataset.change(lambda p:(str(ROOT/p),next(r for r in records if r['local_path']==p)),dataset,[dsimage,dsinfo])
         open_dataset.click(lambda p:(str(ROOT/p),gr.update(selected='edit')),dataset,[image,tabs])
 
-        def history_list(pipe,t,date,failure):
+        def history_list(t,date,failure):
             items=[]; imgs=[]
             for p in sorted((ROOT/'data/outputs').glob('*/*/metadata.json'),reverse=True):
                 r=json.loads(p.read_text(encoding='utf-8'))
-                if pipe!='all' and r['pipeline']!=pipe: continue
+                if r.get('pipeline')!='qwen_image': continue
                 if t.lower() not in r['target_object'].lower() or date not in str(p) or failure.lower() not in str(r['warnings']).lower(): continue
                 items.append((r['run_id']+' · '+r['pipeline']+' · '+zh(r['status']),str(p)))
                 if r.get('strict_output'): imgs.append((r['strict_output'],r['run_id']))
             return gr.update(choices=items,value=items[0][1] if items else None),imgs[:40]
-        refresh.click(history_list,[hpipeline,htarget,hdate,hfailure],[history,gallery])
+        refresh.click(history_list,[htarget,hdate,hfailure],[history,gallery])
         history.change(lambda p:json.loads(Path(p).read_text(encoding='utf-8')) if p else {},history,hjson)
         @guarded
         def rate(p,*values):

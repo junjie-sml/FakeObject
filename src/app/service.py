@@ -88,7 +88,7 @@ def run_edit(image,pipeline,user_prompt,target_object=None,target_instance=None,
              strict_preservation=True,quality_profile='preview',detection=None,spec=None,backend_prompt=None,
              mask_settings=None,occluder_mask=None,steps=None,prompt_mode='autonomous',**kwargs):
     start=time.perf_counter(); im=load_image(image); target=infer_target(user_prompt,target_object)
-    if pipeline not in ['brushedit','qwen_image']: raise ValueError('Unknown pipeline.')
+    if pipeline != 'qwen_image': raise ValueError('Unknown pipeline.')
     folder=new_run(); original=folder/'original.png'; im.save(original)
     result=EditResult(run_id=folder.name,pipeline=pipeline,status='PARTIALLY READY',output_dir=str(folder),original_image=str(original),target_object=target,raw_user_prompt=user_prompt,seed=int(seed),hardware_stats=detect_hardware())
     settings={'mask_dilation_px':None,'mask_dilation_ratio':.02,'mask_feather_px':3,'cleanup_min_component':32,'erosion_px':0,'fill_holes':True,**(mask_settings or {})}; generation={}
@@ -119,14 +119,14 @@ def run_edit(image,pipeline,user_prompt,target_object=None,target_instance=None,
             if not backend_prompt or backend_prompt==spec.final_edit_prompt:
                 result.backend_prompt=compile_prompt(spec,pipeline)
             result.backend_prompt=bind_qwen_prompt(result.backend_prompt,user_prompt,result.selected_region)
-        result.target_caption=compile_prompt(spec,'brushedit'); result.negative_prompt=spec.negative_prompt
+        result.negative_prompt=spec.negative_prompt
         result.warnings+=spec.warnings+result.scene_analysis['warnings']
         thresholds=config('novelty_rules')['thresholds']
         if any(getattr(spec.scores,key+'_score')<value for key,value in thresholds.items()):
             raise ValueError('Prompt validation below threshold; revise the concept JSON before generation. '+ '; '.join(spec.warnings))
         (folder/'prompt.txt').write_text(result.backend_prompt,encoding='utf-8')
         size={'preview':512,'balanced':768,'high':1024}[quality_profile]
-        default_steps=config('qwen_image')['steps'] if pipeline=='qwen_image' else {'preview':20,'balanced':30,'high':40}[quality_profile]
+        default_steps=config('qwen_image')['steps']
         generation={'max_side':size,'steps':int(steps or default_steps),'quality':quality_profile,'strict_preservation':strict_preservation}
         response=ModelManager().run(pipeline,{'action':'edit','image':str(original),'mask':result.processed_mask,'prompt':result.backend_prompt,'negative_prompt':spec.negative_prompt,'seed':int(seed),'output':str(folder/'raw_output.png'),**generation},timeout=config('app')['worker_timeout'])
         generated=Image.open(response['output']).convert('RGB')

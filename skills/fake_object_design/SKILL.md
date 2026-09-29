@@ -11,4 +11,4 @@ Reject category swaps and familiar products with cosmetic changes when the user 
 
 Preserve a detailed user concept in minimal-polish mode. Do not let templates overwrite it. Use `prompt_validator.py` for explicitly heuristic text scores. These are not image-quality measurements. Keep user design intent, target, scene, exclusions and physical constraints in separate schema fields.
 
-Compile BrushEdit as a target-region caption with its native negative prompt; compile Qwen as an editing instruction with preservation language. Never replace one image model with another silently. Keep raw and strict-composited outputs and record the full spec, seed and backend prompt. Examples: [examples.json](examples.json).
+Compile Qwen as an editing instruction with preservation language. Never replace one image model with another silently. Keep raw and strict-composited outputs and record the full spec, seed and backend prompt. Examples: [examples.json](examples.json).

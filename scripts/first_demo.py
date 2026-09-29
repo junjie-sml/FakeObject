@@ -8,7 +8,7 @@ from src.system.paths import ROOT
 from src.app.service import detect, run_edit
 
 def main():
-    p=argparse.ArgumentParser(); p.add_argument('--pipeline',choices=['brushedit','qwen_image'],default='brushedit'); p.add_argument('--steps',type=int,default=None); args=p.parse_args()
+    p=argparse.ArgumentParser(); p.add_argument('--pipeline',choices=['qwen_image'],default='qwen_image'); p.add_argument('--steps',type=int,default=None); args=p.parse_args()
     rows=[json.loads(x) for x in (ROOT/'data/metadata/image_manifest.jsonl').read_text().splitlines()]
     row=rows[0]; path=ROOT/row['local_path']
     cached=ROOT/'data/metadata/demo_detection.json'

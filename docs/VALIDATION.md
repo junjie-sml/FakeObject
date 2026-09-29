@@ -1,6 +1,14 @@
-# Release validation — 2026-09-29
+# Release validation â€” 2026-09-29
 
-## Reproducible source installation
+## Version 0.3.0: single-pipeline update
+
+- Local CPU suite: **77 passed, 3 skipped**. Installation-profile tests cover the full default, UI-only, detection-only and compatibility aliases without downloading weights.
+- The three Qwen processor regressions passed separately in the Qwen environment.
+- Live UI on port 7860 returned **HTTP 200**, with six tabs and no retired backend controls.
+- README contains no Chinese characters; the detailed English installation guide covers setup, usage and troubleshooting.
+- This update did not rerun full GPU image generation. Model conditioning and generation settings remain unchanged.
+
+## Previous clean source installation (0.2.0)
 
 A clean source snapshot was exported without models, data, upstream checkouts
 or virtual environments. On Windows / Python 3.11.7:
@@ -9,7 +17,7 @@ or virtual environments. On Windows / Python 3.11.7:
 - CPU regression suite in the newly created environment: **69 passed, 3 skipped**.
 - Fresh UI launched on a temporary test port and returned **HTTP 200**; the test service was then stopped.
 - No downloaded photo dataset was needed for this validation.
-- Original workspace environments (UI, detection, BrushEdit, Qwen): all four `pip check` runs passed.
+- Original workspace environments (UI, detection, Qwen): all three `pip check` runs passed.
 - Audited dependency checkouts match `configs/repositories.json`.
 
 The three skipped cases require the separate Qwen environment and local model
@@ -30,4 +38,4 @@ model adherence limitation, not proof of a candidate-index error.
 
 Local photographs, run metadata and screenshots are excluded from this source
 release. Reproduce GPU checks with your own shareable photo or the optional
-COCO download; see [the installation guide](INSTALLATION.zh-CN.md).
+COCO download; see [the installation guide](INSTALLATION.md).

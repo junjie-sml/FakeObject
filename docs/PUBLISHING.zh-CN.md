@@ -4,7 +4,7 @@
 
 ## 分发结构
 
-**GitHub 保存代码、配置、依赖版本、文档和测试；模型默认从官方来源下载。** 完整生成模型约 39 GiB，不需要塞进 Git。Google Drive 仅作为有必要且符合上游条款的团队离线镜像。
+**GitHub 保存代码、配置、依赖版本、文档和测试；模型默认从官方来源下载。** 完整生成模型约 31.65 GiB，不需要塞进 Git。Google Drive 仅作为有必要且符合上游条款的团队离线镜像。
 
 | 内容 | 位置 | 提交 Git？ |
 |---|---|---|
@@ -77,7 +77,7 @@ git push -u origin main
 3. **Actions → CPU tests** 的 Windows/Linux CPU 检查结果；它不运行 GPU 模型，也不能证明 GPU 推理质量。
 4. 在另一个目录 clone，一台新机器按 [安装教程](INSTALLATION.zh-CN.md) 配置并上传自己的图片测试。
 
-可在 About 中填写：`Local fictional-object editing workbench with Grounded-SAM, BrushEdit and Qwen-Image.`；建议 topics：`computer-vision`, `image-editing`, `gradio`, `research`。是否公开仓库由维护者在 GitHub 设置，本流程不会自动改变可见性。
+可在 About 中填写：`Local fictional-object editing workbench with Grounded-SAM-2 and Qwen-Image-2.1.`；建议 topics：`computer-vision`, `image-editing`, `gradio`, `research`。是否公开仓库由维护者在 GitHub 设置，本流程不会自动改变可见性。
 
 ## 4. 邀请合作者与交付
 
@@ -102,7 +102,7 @@ git push -u origin main
 envs\orchestrator\Scripts\python.exe scripts/package_models.py --model grounding_dino
 envs\orchestrator\Scripts\python.exe scripts/package_models.py --model sam2
 envs\orchestrator\Scripts\python.exe scripts/package_models.py --model qwen
-# 按需制作：--model brushedit 或 --model clip
+# 按需制作：--model clip
 ```
 
 输出在 `dist/model-bundles/`：每个模型一个 `模型名-revision前12位.zip` 和同名 `.zip.sha256`。使用 ZIP64、不压缩权重，避免大量无效压缩开销；Qwen 包约 31 GiB，需要额外足够磁盘空间。

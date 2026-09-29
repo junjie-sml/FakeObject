@@ -22,18 +22,6 @@ sam2:
   - '*.json'
   - README.md
   revision: de431c4043854a71d8101e17995dfe596bf101a5
-brushedit:
-  source: TencentARC/BrushEdit
-  path: models/brushedit
-  pipeline: brushedit
-  precision: float16
-  required: true
-  license_note: BrushEdit custom license and separate base-model terms
-  patterns:
-  - brushnetX/*
-  - base_model/realisticVisionV60B1_v51VAE/*
-  - README.md
-  revision: 7e00da078a956ba2a9c2c91807c1f126b51489e6
 qwen:
   source: Qwen/Qwen-Image-2.1
   path: models/qwen_image

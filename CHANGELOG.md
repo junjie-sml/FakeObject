@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 — 2026-09-29
+
+- Use Grounded-SAM-2 + Qwen-Image-2.1 as the single editing pipeline.
+- Remove BrushEdit/BrushNetX runtime, dependencies, model downloads and comparison UI.
+- Install the complete Qwen stack by default; retain lightweight UI/detection profiles.
+- Provide an English-only README and detailed English setup and usage guide.
+
 ## 0.2.0 — 2026-09-29
 
 - Prepared a source-only GitHub release with MIT licensing for project-authored code, concise README, collaborator setup guide and optional Google Drive model-bundle tutorial.

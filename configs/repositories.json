@@ -1,8 +1,4 @@
 {
-  "BrushEdit": {
-    "url": "https://github.com/TencentARC/BrushEdit.git",
-    "revision": "0f415c52aa306b5d53f5cb54045fba4fe521fed5"
-  },
   "Grounded-SAM-2": {
     "url": "https://github.com/IDEA-Research/Grounded-SAM-2.git",
     "revision": "b7a9c29f196edff0eb54dbe14588d7ae5e3dde28"

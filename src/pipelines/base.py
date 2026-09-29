@@ -26,7 +26,6 @@ class EditResult(BaseModel):
     fake_object_spec:dict=Field(default_factory=dict)
     polished_prompt:str=''
     backend_prompt:str=''
-    target_caption:str=''
     negative_prompt:str=''
     raw_model_output:str|None=None
     strict_output:str|None=None

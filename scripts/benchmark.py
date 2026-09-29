@@ -10,7 +10,7 @@ from src.app.service import detect,run_edit
 from src.prompting.fake_object_skill import generate_concepts
 
 def main():
-    p=argparse.ArgumentParser(); p.add_argument('--limit',type=int,default=10); p.add_argument('--generate',choices=['brushedit','qwen_image']); args=p.parse_args()
+    p=argparse.ArgumentParser(); p.add_argument('--limit',type=int,default=10); p.add_argument('--generate',choices=['qwen_image']); args=p.parse_args()
     rows=[json.loads(x) for x in (ROOT/'data/metadata/image_manifest.jsonl').read_text().splitlines()][:args.limit]
     results=[]
     targets=['cup','bottle','chair','backpack','cell phone','keyboard','vase','book','bowl','laptop','wine glass','remote','handbag','clock']

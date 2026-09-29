@@ -17,6 +17,8 @@ class ModelManager:
         self.lock = FileLock(str(ROOT / 'data/cache/gpu.lock'))
 
     def run(self, worker, payload, timeout=1800):
+        modules = {'grounded_sam': 'grounded_sam_worker', 'qwen_image': 'qwen_worker'}
+        if worker not in modules: raise WorkerError('Unsupported worker: ' + worker)
         py = python_for(worker)
         if not py.exists():
             raise WorkerError(f'{worker.upper()} UNAVAILABLE: run python scripts/create_envs.py --worker {worker}')
@@ -25,7 +27,7 @@ class ModelManager:
         res = req.with_name(f'{ident}.response.json')
         req.write_text(json.dumps(payload, ensure_ascii=False), encoding='utf-8')
         log = ROOT / 'logs/workers' / f'{worker}-{ident}.log'
-        module = {'grounded_sam': 'grounded_sam_worker', 'brushedit': 'brushedit_worker', 'qwen_image': 'qwen_worker'}[worker]
+        module = modules[worker]
         started = time.perf_counter()
         try:
             with self.lock.acquire(timeout=30):

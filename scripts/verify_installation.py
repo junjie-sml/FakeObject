@@ -10,7 +10,7 @@ from src.system.model_manager import ModelManager
 def verify():
     report={'hardware':detect_hardware(),'workers':{}}
     versions={}
-    for name in ['orchestrator','grounded_sam','brushedit','qwen_image']:
+    for name in ['orchestrator','grounded_sam','qwen_image']:
         py=python_for(name)
         if not py.exists(): versions[name]={'error':'Environment not created'}; continue
         try:

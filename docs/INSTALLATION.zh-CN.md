@@ -5,9 +5,9 @@
 ## 1. 准备机器
 
 - 安装 64 位 **Python 3.11** 和 Git，重新打开终端。脚本创建独立 venv，不修改全局 Conda/CUDA 环境。
-- 实测平台：Windows、RTX 4070 12 GB 显存、32 GB 内存。完整安装建议预留 100 GB，环境、下载缓存和输出也占空间。
+- 实测平台：Windows、RTX 4070 12 GB 显存、32 GB 内存。完整安装建议预留 80 GB，环境、下载缓存和输出也占空间。
 - 生成需要 NVIDIA GPU 和兼容驱动，`nvidia-smi` 应能列出 GPU。PyTorch wheel 自带 CUDA runtime，一般无需另装 CUDA Toolkit。
-- 检测/Qwen：Torch 2.6.0 + CUDA 12.4；BrushEdit：Torch 2.0.1 + CUDA 11.8。`nvidia-smi` 的 CUDA 数字代表驱动能力，不必与所有 worker 的 CUDA 版本相同。
+- 检测/Qwen：Torch 2.6.0 + CUDA 12.4。`nvidia-smi` 的 CUDA 数字代表驱动能力，不必与所有 worker 的 CUDA 版本相同。
 - Linux/WSL2 提供安装路径，但未做 GPU 端到端验证。macOS/AMD GPU 不支持本配置；需要新版 CUDA 的新架构显卡也不保证兼容。
 
 ```powershell
@@ -29,15 +29,14 @@ cd FakeObject
 
 ## 3. 选择安装范围
 
-首次建议只装一个后端，确认正常后再添加另一个。
+默认安装完整的 Grounded-SAM-2 + Qwen 2.1 流程。
 
 | 命令 | 功能 | 模型下载量约 |
 |---|---|---:|
 | `python scripts/bootstrap.py --ui-only` | UI、概念设计；无检测/生成 | 0 |
-| `python scripts/bootstrap.py` | UI、检测分割；无生成 | 0.79 GiB |
-| `python scripts/bootstrap.py --backend brushedit` | UI、检测、BrushEdit | 8.20 GiB |
+| `python scripts/bootstrap.py --backend none` | UI、检测分割；无生成 | 0.79 GiB |
 | `python scripts/bootstrap.py --backend qwen` | UI、检测、Qwen | 31.65 GiB |
-| `python scripts/bootstrap.py --full` | 两个编辑后端及检测 | 39.06 GiB |
+| `python scripts/bootstrap.py` | 完整 UI、检测、Qwen | 31.65 GiB |
 
 依赖包、环境和缓存体积另计。第一次安装可能较久，不要同时运行多个安装进程。
 
@@ -108,7 +107,7 @@ Linux：`FAKE_OBJECT_PORT=7861 python3.11 scripts/launch_app.py`。`.env.example
 1. 在 **单图编辑** 上传照片，优先选目标清晰、无遮挡的图片。
 2. **目标物体** 输入短名称，如 `杯子` / `cup`、`建筑` / `building`。常见中文词会本地映射成检测词；复杂目标可填英文短语。
 3. **编辑要求** 输入完整需求，例如 `把选中的建筑换成风格相近的水晶建筑，修改全部可见立面，保持周围环境。`
-4. 选择已安装的 **编辑方案**。界面默认 A；只装 Qwen 时应切到 **B · Grounded-SAM-2 + Qwen 2.1**。
+4. 编辑流程固定为 **Grounded-SAM-2 + Qwen 2.1**，无需选择后端。
 5. 点击 **检测目标**。默认“尽量找全”、置信度 0.15、最多 50 个候选。整座建筑和其中的塔楼属于不同范围，不一定是重复检测。可以补充名称、调低阈值或调整数量；不保证找到全部物体。
 6. 点击候选缩略图或使用下拉框选择一个。核对 **当前编辑目标：候选 N** 和绿色蒙版；多候选必须明确选择，每次生成只编辑一个选区。
 7. 必要时 **预览蒙版**，在高级设置调整扩张/羽化。内部孔洞默认填充；保留窗洞等真实孔洞时可关闭。前景保护蒙版中的白色区域会保留。
@@ -116,7 +115,6 @@ Linux：`FAKE_OBJECT_PORT=7861 python3.11 scripts/launch_app.py`。`.env.example
 9. 首次保持 **预览（已验证）**、seed 42、**严格保持场景** 开启，点击 **开始生成**。Qwen 实测约两分钟，包含模型加载；不要重复提交。
 10. 向下滚动至提示词字段下的 **模型原始生成结果** 和 **严格保持场景的结果**。也可在 **结果与历史 → 刷新** 找到保存记录。
 
-BrushEdit 的英文文本编码器对复杂中文理解有限，推荐英文设计及目标描述。当前 BrushEdit 适配器从结构化概念编译目标描述，不等同于 Qwen 直接遵从原始中文编辑要求。
 
 切换候选会清空上一目标的结果。READY 表示计算和保存成功，不保证视觉质量；即使选了完整建筑，模型仍可能只充分改造中央立面，两侧墙面改变不足。
 
@@ -172,7 +170,7 @@ envs\qwen_image\Scripts\python.exe -m unittest discover -s tests -p test_qwen_pr
 | `git` 找不到 | 安装 Git，重新打开终端，验证 `git --version` |
 | HF 下载 401/403 | 查看对应模型访问条款；有授权后在当前 shell 设置 `HF_TOKEN`，不要写入 Git |
 | 下载中断/缺少模型 | 重跑所选 backend 安装，或 `scripts/download_models.py --model qwen` |
-| UI 能开，生成不可用 | 是否只装了 UI/检测？或选了没装的后端？补装并切到对应方案 |
+| UI 能开，生成不可用 | 是否只装了 UI/检测？运行默认 bootstrap 命令补装 Qwen |
 | Torch CUDA unavailable | 用相应 worker 的 Python 检查 CUDA，核对驱动和官方 CUDA wheel |
 | CUDA OOM | 使用预览、关闭其它 GPU 任务；一次自动降低分辨率重试仍失败则检查 worker 日志 |
 | 只改变一部分 | 核对蒙版，简化要求，使用“沿用用户构想”；模型仍有遵从性局限 |

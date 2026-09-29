@@ -2,7 +2,6 @@
 
 ## Provenance and compatibility decisions
 
-The actual official repositories were cloned and inspected. Native BrushEdit's `app/src/brushedit_all_in_one_pipeline.py` accepts a loaded pipeline, target caption, mask, original RGB array and generator. Its UI template eagerly loads multiple base models; the adapter deliberately loads only RealisticVision and BrushNetX. The native inference function is called without modification. Native VLM intent reasoning is replaced by a disclosed local deterministic target/spec stage to avoid mandatory API calls or a 7B helper.
 
 Grounded-SAM-2's `grounded_sam2_hf_model_demo.py` documents the HF AutoProcessor / AutoModelForZeroShotObjectDetection route. The adapter examines the installed processor's signature because Transformers 4.48 uses `box_threshold` while the current example uses `threshold`. DINO is unloaded before SAM loads. SAM 2.1 tiny is selected to leave room for the OS and other work.
 

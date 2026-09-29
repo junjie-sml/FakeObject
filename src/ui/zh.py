@@ -79,7 +79,6 @@ MESSAGES={
  'Select a saved run first.':'请先选择一条已保存的记录。',
  'Invalid result path.':'结果路径无效。',
  'No semantic VLM loaded; lighting and support are preservation constraints, not measured estimates. Supply an occluder mask for exact foreground protection.':'未加载语义视觉模型；光照和支撑信息为保守的保持约束，并非测量结果。如需精确保留前景，请提供保护蒙版。',
- 'Native BrushNetX inference; intent, target caption and SAM2 mask supplied by local orchestrator. Native BrushEdit VLM/SAM1 agent is not loaded.':'使用原生 BrushNetX 推理；意图、目标描述和 SAM2 蒙版由本地程序提供，未加载 BrushEdit 的大型 VLM／SAM1 代理。',
  'Qwen uses a separate mask reference; strict localization is enforced by final compositing.':'Qwen 使用独立参考蒙版，最终通过严格合成约束编辑范围。',
  'GPU is busy with another application request. Wait for it to finish.':'另一个任务正在使用 GPU，请等待其完成。',
  'EMPTY_MASK: choose another detection or provide a non-empty mask.':'蒙版为空，请选择其他检测结果或提供有效蒙版。',

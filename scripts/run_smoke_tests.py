@@ -32,7 +32,7 @@ def main():
         m=np.zeros((80,80),dtype='uint8'); m[20:50,20:50]=255
         h,a=process_mask(m); assert np.asarray(h).sum()>0; return {'nonempty':True}
     check('mask_processing',mask)
-    for worker in ['grounded_sam','brushedit','qwen_image']:
+    for worker in ['grounded_sam','qwen_image']:
         if args.ui_only or not python_for(worker).exists():
             results[worker+'_health']={'status':'SKIPPED','reason':'UI-only check or optional environment not installed'}
             continue
@@ -49,7 +49,7 @@ def main():
             return r
         check('actual_grounding_segmentation',grounding)
     else: results['actual_grounding_segmentation']={'status':'SKIPPED','reason':'Use --inference'}
-    for backend in ['brushedit','qwen_image']:
+    for backend in ['qwen_image']:
         p=ROOT/f'data/metadata/demo_{backend}.json'
         if p.exists():
             r=json.loads(p.read_text()); results[backend+'_actual_edit']={'status':'PASS' if r['status']=='READY' else 'FAIL','result':r['output_dir'],'warnings':r['warnings'],'runtime':r['runtime']}

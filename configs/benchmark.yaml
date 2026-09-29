@@ -1,5 +1,5 @@
 limit: 10
 generate_images: false
-pipeline: brushedit
+pipeline: qwen_image
 seed: 42
 quality: preview

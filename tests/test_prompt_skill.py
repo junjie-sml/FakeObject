@@ -17,7 +17,7 @@ def test_schema_and_scene_invariance(target):
     assert a[0].fictional_object!=b[0].fictional_object
     assert a[0].model_dump()==generate_concepts('Replace the '+target+' with a fictional object.',target,scene,seed=42)[0].model_dump()
     assert FakeObjectSpec.model_validate_json(a[0].model_dump_json())==a[0]
-    assert compile_prompt(a[0],'brushedit')!=compile_prompt(a[0],'qwen_image')
+    assert compile_prompt(a[0],'qwen_image') and a[0].raw_user_prompt
 
 def test_bad_category_detected():
     spec=generate_concepts('invent','cup')[0]

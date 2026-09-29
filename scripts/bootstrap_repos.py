@@ -37,7 +37,7 @@ def main():
     args=parser.parse_args()
     path=ROOT/'data/metadata/repository_versions.json'; path.parent.mkdir(parents=True,exist_ok=True)
     existing=json.loads(path.read_text(encoding='utf-8')) if path.exists() else []
-    records={r['name']:r for r in existing}
+    records={r['name']:r for r in existing if r['name'] in REPOS}
     for name in REPOS if args.repo=='all' else [args.repo]:
         records[name]=ensure_repo(name)
         print(f'{name}: {records[name]["commit"]}')
